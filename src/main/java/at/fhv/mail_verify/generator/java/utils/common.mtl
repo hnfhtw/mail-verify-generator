@@ -1,0 +1,43 @@
+[comment encoding = UTF-8 /]
+[module common('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+[import at::fhv::mail_verify::generator::java::utils::pathutil/]
+
+[**
+ * Generate the name of an element
+ * @param aNamedElement The element whose name should be generated 
+*/]
+[template public genName(aNamedElement : NamedElement)]
+[aNamedElement.name/]
+[/template]
+
+[**
+ * Generate the comment for an element
+ * @param The element for which the comment should be generated
+*/]
+[template public genComment(anElement : Element)]
+[for (ownedComment : Comment | anElement.ownedComment)]
+[ownedComment._body/][/for]
+[/template]
+
+[**
+ * Generate the package name for a type
+ * @param aType The type for which the package name should be generated
+*/]
+[template public genPackageName(aType : Type)]
+[aType.packagePath().normalizeName()->reverse()->sep('.')/]
+[/template]
+
+[**
+ * Generate the package declaration
+ * @param aClassifier The classifier for which the package declaration should be generated
+*/]
+[template public genPackageDeclaration(aClassifier : Classifier) post(trim())]
+[if (aClassifier.genPackageName().size() > 0)]
+package [aClassifier.genPackageName()/];
+[/if]
+
+// [protected ('(user defined imports)')]
+
+// [/protected]
+[/template]

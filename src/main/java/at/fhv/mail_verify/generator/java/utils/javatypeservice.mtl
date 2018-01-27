@@ -1,0 +1,6 @@
+[comment encoding = UTF-8 /]
+[module javatypeservice('http://www.eclipse.org/uml2/5.0.0/UML')/]
+
+[query public getJavaType(arg0 : TypedElement) : String
+	= invoke('at.fhv.mail_verify.generator.java.utils.JavaTypeService', 'getJavaType(org.eclipse.uml2.uml.TypedElement)', Sequence{arg0})
+/]

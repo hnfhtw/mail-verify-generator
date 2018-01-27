@@ -1,0 +1,28 @@
+[comment encoding = UTF-8 /]
+[**
+ * Main module which is the basis for the acceleo generator
+ */]
+[module main('http://www.eclipse.org/uml2/5.0.0/UML')/]
+
+[import at::fhv::mail_verify::generator::java::endpoint::endpoint/]
+[import at::fhv::mail_verify::generator::java::handler::handler/]
+[import at::fhv::mail_verify::generator::java::main::main/]
+[import at::fhv::mail_verify::generator::java::model::model/]
+
+[**
+ * Generate the application based on the given model
+ * @param aModel The model which is used to generate the application
+ */]
+[template public main(aModel : Model)]
+	
+	[comment @main /]
+	[aModel.generateMain()/]
+
+	[for (aPackage : Package | aModel.eAllContents(Package))]
+		[for (aClass : Class | aPackage.packagedElement->filter(Class))]
+			[aClass.generateEndpoint()/]
+			[aClass.generateHandler()/]
+			[aClass.generateModel()/]
+		[/for]
+	[/for]
+[/template]

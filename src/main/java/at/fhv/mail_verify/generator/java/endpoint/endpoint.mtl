@@ -1,0 +1,62 @@
+[comment encoding = UTF-8 /]
+[**
+ * This module generates a REST endpoint in Java
+ */]
+[module endpoint('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+[import at::fhv::mail_verify::generator::java::utils::stereotypeservice/]
+[import at::fhv::mail_verify::generator::java::utils::pathutil/]
+[import at::fhv::mail_verify::generator::java::utils::common/]
+[import at::fhv::mail_verify::generator::java::utils::attributes/]
+[import at::fhv::mail_verify::generator::java::utils::declaration/]
+[import at::fhv::mail_verify::generator::java::utils::type/]
+
+[**
+ * Generate the endpoint for the given class
+ * @param aClass The class which is the basis for generating the endpoint in Go
+ */]
+[template public generateEndpoint(aClass : Class)]
+	[if (aClass.hasStereotype('Endpoint'))]
+		[file (aClass.genFilePath(), false, 'UTF-8')]
+[aClass.genPackageDeclaration()/]
+
+@org.springframework.web.bind.annotation.RestController
+[aClass.genVisibility()/][aClass.genAbstract()/][aClass.genFinal()/]class [aClass.genName()/][aClass.genInheritance()/][aClass.genInterfaceRealization()/] {
+	[aClass.genAttributes()/]
+	
+	[for (anOperation : Operation | aClass.ownedOperation->union(aClass.allRealizedInterfaces().ownedOperation))]
+	[if anOperation.hasStereotype('Read')]
+	@org.springframework.web.bind.annotation.GetMapping("[anOperation.getValue(anOperation.getAppliedStereotype('mail-verify-uml-profile::Read'), 'path')/]")
+	[elseif anOperation.hasStereotype('Write')]
+	@org.springframework.web.bind.annotation.PostMapping("[anOperation.getValue(anOperation.getAppliedStereotype('mail-verify-uml-profile::Write'), 'path')/]")
+	[/if]
+	[genVisibility()/][genAbstract()/][genFinal()/][genStatic()/][genReturn()/] [genName()/]([genWebOperationParameters()/]) throws Exception {
+		// [protected (anOperation.name)]
+		[if (anOperation.genReturn() <> 'void')]return null;[/if]
+		// [/protected]
+	}
+	
+	[/for]
+	// [protected ('(user defined operations)')]
+	
+	// [/protected]
+}
+		[/file]
+	[/if]
+[/template]
+
+[**
+ * Generate the parameters for an operation
+ * @param anOperation The operation for which the parameters should be generated
+*/]
+[template public genWebOperationParameters(anOperation : Operation)]
+[anOperation.ownedParameter->select(param : Parameter | not (param.direction = ParameterDirectionKind::return)).genWebOperationParameter()->sep(', ')/]
+[/template]
+
+[**
+ * Generate a single parameter for an operation
+ * @param aParameter The parameter to generate
+*/]
+[template protected genWebOperationParameter(aParameter : Parameter)]
+@org.springframework.web.bind.annotation.RequestParam("[aParameter.genName()/]") [aParameter.genType()/] [aParameter.genName()/]
+[/template]

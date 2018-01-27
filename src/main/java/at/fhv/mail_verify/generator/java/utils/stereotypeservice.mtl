@@ -1,0 +1,6 @@
+[comment encoding = UTF-8 /]
+[module stereotypeservice('http://www.eclipse.org/uml2/5.0.0/UML')/]
+
+[query public hasStereotype(arg0 : Element, arg1 : String) : Boolean
+	= invoke('at.fhv.mail_verify.generator.java.utils.StereotypeService', 'hasStereotype(org.eclipse.uml2.uml.Element, java.lang.String)', Sequence{arg0, arg1})
+/]

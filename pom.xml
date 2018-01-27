@@ -1,0 +1,144 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>at.fhv</groupId>
+  <artifactId>mail-verify-generator</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  	
+	
+  <properties>
+    <!-- version -->
+    <acceleo.version>3.6.4</acceleo.version>
+    <uml.version>5.0.2.v20150202-0947</uml.version>
+	<uml.types.version>2.0.0.v20150202-0947</uml.types.version>
+	<uml.common.version>2.0.1.v20150202-0947</uml.common.version>
+	<uml.resources.version>3.1.0.v201005031530</uml.resources.version>
+	<slf4j.version>1.6.4</slf4j.version>
+  </properties>
+	
+ <repositories>
+	<repository>
+		<id>Eclipse - Acceleo Groups</id>
+		<url>https://repo.eclipse.org/content/groups/releases</url>
+	</repository>
+	<repository>
+		<id>Eclipse - Acceleo Snapshots</id>
+		<url>https://repo.eclipse.org/content/repositories/acceleo-snapshots</url>
+	</repository>
+	<repository>
+		<id>Eclipse - Acceleo Release</id>
+		<url>https://repo.eclipse.org/content/repositories/acceleo-releases</url>
+	</repository>
+  </repositories>
+  
+ <pluginRepositories>
+	<pluginRepository>
+		<id>Eclipse - Acceleo Groups</id>
+		<url>https://repo.eclipse.org/content/groups/releases</url>
+	</pluginRepository>
+	<pluginRepository>
+		<id>Eclipse - Acceleo Snapshots</id>
+		<url>https://repo.eclipse.org/content/repositories/acceleo-snapshots</url>
+	</pluginRepository>
+	<pluginRepository>
+		<id>Eclipse - Acceleo Release</id>
+		<url>https://repo.eclipse.org/content/repositories/acceleo-releases</url>
+	</pluginRepository>
+</pluginRepositories>
+
+	<distributionManagement>
+		<repository>
+			<id>packagecloud-hnfhtw</id>
+			<url>packagecloud+https://packagecloud.io/hnfhtw/mail_verify</url>
+		</repository>
+		<snapshotRepository>
+			<id>packagecloud-hnfhtw</id>
+			<url>packagecloud+https://packagecloud.io/hnfhtw/mail_verify</url>
+		</snapshotRepository>
+	</distributionManagement>
+  
+  <dependencies>
+		<dependency>
+			<groupId>org.eclipse.acceleo</groupId>
+			<artifactId>org.eclipse.acceleo.maven</artifactId>
+			<version>${acceleo.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.acceleo</groupId>
+			<artifactId>org.eclipse.acceleo.engine</artifactId>
+			<version>${acceleo.version}-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.acceleo</groupId>
+			<artifactId>org.eclipse.uml2.uml</artifactId>
+			<version>${uml.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.acceleo</groupId>
+			<artifactId>org.eclipse.uml2.types</artifactId>
+			<version>${uml.types.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.acceleo</groupId>
+			<artifactId>org.eclipse.uml2.common</artifactId>
+			<version>${uml.common.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.uml2</groupId>
+			<artifactId>org.eclipse.uml2.uml.resources</artifactId>
+			<version>${uml.resources.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>org.eclipse.uml2.uml</artifactId>
+					<groupId>org.eclipse.uml2</groupId>
+				</exclusion>
+			</exclusions>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+	</dependencies>
+  
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.acceleo</groupId>
+				<artifactId>org.eclipse.acceleo.maven</artifactId>
+				<version>${acceleo.version}</version>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<useBinaryResources>false</useBinaryResources>
+					<usePlatformResourcePath>true</usePlatformResourcePath>
+					<acceleoProject>
+						<root>${project.basedir}</root>
+						<entries>
+							<entry>
+								<input>src/main/java</input>
+								<output>target/classes</output>
+							</entry>
+						</entries>
+					</acceleoProject>
+					<packagesToRegister>
+						<packageToRegister>org.eclipse.uml2.uml.UMLPackage</packageToRegister>
+					</packagesToRegister>
+				</configuration>
+			</plugin>
+		</plugins>
+
+		<extensions>
+			<extension>
+				<groupId>io.packagecloud.maven.wagon</groupId>
+				<artifactId>maven-packagecloud-wagon</artifactId>
+				<version>0.0.6</version>
+			</extension>
+		</extensions>
+	</build>
+</project>

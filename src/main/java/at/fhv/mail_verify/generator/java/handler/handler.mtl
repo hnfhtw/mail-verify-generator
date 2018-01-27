@@ -1,0 +1,31 @@
+[comment encoding = UTF-8 /]
+[**
+ * This module generates a handler which contains the business logic in Java
+ */]
+[module handler('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+[import at::fhv::mail_verify::generator::java::utils::stereotypeservice/]
+[import at::fhv::mail_verify::generator::java::utils::pathutil/]
+[import at::fhv::mail_verify::generator::java::utils::common/]
+[import at::fhv::mail_verify::generator::java::utils::attributes/]
+[import at::fhv::mail_verify::generator::java::utils::declaration/]
+
+[**
+ * Generate the handler for the given class
+ * @param aClass The class which is the basis for generating the handler in Go
+ */]
+[template public generateHandler(aClass : Class)]
+	[if (aClass.hasStereotype('Handler'))]
+		[file (aClass.genFilePath(), false, 'UTF-8')]
+[aClass.genPackageDeclaration()/]
+
+[aClass.genVisibility()/][aClass.genAbstract()/][aClass.genFinal()/]class [aClass.genName()/][aClass.genInheritance()/][aClass.genInterfaceRealization()/] {
+	[aClass.genAttributes()/]
+
+	[aClass.genSingleton()/]
+	
+	[aClass.genOperations()/]
+}
+		[/file]
+	[/if]
+[/template]

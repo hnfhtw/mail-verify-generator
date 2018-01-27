@@ -1,0 +1,52 @@
+[comment encoding = UTF-8 /]
+[module pathutil('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+
+[**
+ * Geneate the full path for a go file
+ * @param aClassifier The classfier for which the full go file path should be generated
+*/]
+[template public genFilePath(aClassifier : Classifier) post (trim())]
+[if (not aClassifier.getNearestPackage().oclIsUndefined())]
+   [aClassifier.genPackagePath().substituteAll('.', '/') + '/' + aClassifier.name + '.java'/]
+[else]
+   [aClassifier.name + '.java'/]
+[/if]
+[/template]
+
+
+[**
+ * Generate the file path for a type
+ * @param aType The type for which the file path should be generated
+*/]
+[template public genPackagePath(aType : Type)]
+[aType.getModel().URI/]/[aType.packagePath().normalizeName()->reverse()->sep('/')/]
+[/template]
+
+[**
+ * Query the package path
+ * @param aType The type on which the package query should be executed
+*/]
+[query public packagePath(aType : Type) : Sequence(Package) = 
+   Sequence{aType.getNearestPackage()}->union(aType.getNearestPackage().ancestors()->filter(Package))->select(pack : Package | pack.oclIsTypeOf(Package))
+/]
+
+[**
+ * Query the package path
+ * @param aType The type on which the package query should be executed
+*/]
+[query public packagePath(aPackage : Package) : Sequence(Package) = 
+   Sequence{aPackage.getNearestPackage()}->union(aPackage.getNearestPackage().ancestors()->filter(Package))->select(pack : Package | pack.oclIsTypeOf(Package))
+/]
+
+[**
+ * Normalize the name of an element
+ * @param anElement The element whose name should be normalized
+*/]
+[template public normalizeName(anElement : NamedElement) post(trim())]
+[if ((anElement.name = 'package') or (anElement.name = 'interface') or (anElement.name = 'class'))]
+   [anElement.name + '_'/]
+[else]
+   [anElement.name/]
+[/if]
+[/template]

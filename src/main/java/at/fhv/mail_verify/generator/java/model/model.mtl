@@ -1,0 +1,28 @@
+[comment encoding = UTF-8 /]
+[**
+ * This module generates a model struct in Java
+ */]
+[module model('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+[import at::fhv::mail_verify::generator::java::utils::stereotypeservice/]
+[import at::fhv::mail_verify::generator::java::utils::pathutil/]
+[import at::fhv::mail_verify::generator::java::utils::common/]
+[import at::fhv::mail_verify::generator::java::utils::attributes/]
+[import at::fhv::mail_verify::generator::java::utils::declaration/]
+
+[**
+ * Generate the model struct for the given class
+ * @param aClass The class which is the basis for generating the struct in Go
+ */]
+[template public generateModel(aClass : Class)]
+	[if (aClass.hasStereotype('Model'))]
+		[file (aClass.genFilePath(), false, 'UTF-8')]
+[aClass.genPackageDeclaration()/]
+
+[aClass.genVisibility()/][aClass.genAbstract()/][aClass.genFinal()/]class [aClass.genName()/][aClass.genInheritance()/][aClass.genInterfaceRealization()/] {
+	[aClass.genAttributes()/]
+	[aClass.genAccessors()/]
+}
+		[/file]
+	[/if]
+[/template]
